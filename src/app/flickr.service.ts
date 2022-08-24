@@ -9,6 +9,7 @@ export interface FlickrPhoto {
   id: string;
   secret: string;
   title: string;
+
 }
 
 export interface FlickrOutput {
@@ -50,4 +51,12 @@ export class FlickrService {
       return urlArray;
     }))
   }
+
+  getPhotoInfo (photoid: string) {
+    
+    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&`;
+    const parameters = `api_key=${environment.flickr.key}&photo_id=${ }&format=json&nojsoncallback=?`;
+
+    return this.http.get(url + parameters).
+  }  
 }
