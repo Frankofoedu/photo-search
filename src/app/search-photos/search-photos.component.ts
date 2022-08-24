@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { FlickerSingleImage, FlickrService } from '../flickr.service';
 
-interface FlickrPhoto { 
-  server: string;
-  id: string;
-  secret: string;
-  title: string;
+class FlickrPhoto { 
+  server!: string;
+  id!: string;
+  secret!: string;
+  title!: string;
+  url!: string;
 
 }
 @Component({
@@ -17,7 +18,7 @@ interface FlickrPhoto {
 
 export class SearchPhotosComponent implements OnInit {
   images: any[] = [];
-  imageInfo!: any;
+  imageInfo: FlickrPhoto;
   keyword: string;
   photoId: string;
   showModal!: boolean;
@@ -26,6 +27,7 @@ export class SearchPhotosComponent implements OnInit {
   constructor(private flickrService: FlickrService) { 
     this.keyword = ''; 
     this.photoId = '';
+    this.imageInfo = new FlickrPhoto();
     
   }
 
@@ -50,13 +52,16 @@ export class SearchPhotosComponent implements OnInit {
 
   async getImageInfo(photoId: any){
     const flickerSingleImageInfo = await lastValueFrom(this.flickrService.getPhotoInfo(photoId));
-    this.imageInfo = flickerSingleImageInfo.photo.urls.url[0]._content;
+    return flickerSingleImageInfo;
   }
 
-  show(id: string)
+  async show(image: any)
   {
-    console.log(id)
-    this.getImageInfo(id);
+    console.log(image)
+    const imageinfo = await this.getImageInfo(image.id);
+    this.imageInfo.url = image.url;
+    this.imageInfo.title = imageinfo.photo.title._content;
+    
     this.showModal = true; // Show-Hide Modal Check
   }
   //Bootstrap Modal Close event

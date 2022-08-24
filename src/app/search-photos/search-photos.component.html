@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4 p-3" *ngFor="let image of images">
             <div class="card">
-                <a href="#" (click) = "show(image.id)">
+                <a href="#" (click) = "show(image)">
                     <img src="{{image.url}}_m.jpg" alt="" title="{{image.title}}">
                 </a>
             </div>
@@ -24,10 +24,10 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+                <h4 class="modal-title" id="myModalLabel">{{imageInfo.title}}</h4>
             </div>
             <div class="modal-body">
-                <img src="{{imageInfo}}"
+                <img src="{{imageInfo.url}}"
                     id="imagepreview" style="width: 425px; height: 425px;">
             </div>
             <div class="modal-footer">
