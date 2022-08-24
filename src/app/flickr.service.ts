@@ -18,6 +18,44 @@ export interface FlickrOutput {
   };
 }
 
+export interface FlickerSingleImage {
+  photo: Photo;
+}
+
+export interface Photo {
+  owner: Owner;
+  title: Title;
+  dates: Dates;
+  urls: Urls;
+}
+export interface Url {
+  type: string;
+  _content: string;
+}
+
+export interface Urls {
+  url: Url[];
+}
+export interface Dates {
+  posted: string;
+  taken: string;
+  takengranularity: number;
+  takenunknown: number;
+  lastupdate: string;
+}
+
+
+export interface Owner {
+  username: string;
+  realname: string;
+  location: string;
+}
+
+export interface Title {
+  _content: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,7 +82,8 @@ export class FlickrService {
       res.photos.photo.forEach((ph: FlickrPhoto) => {
         const photoObj = {
           url: `https://live.staticflickr.com/${ph.server}/${ph.id}_${ph.secret}.jpg`,
-          title: ph.title
+          title: ph.title,
+          id: ph.id
         };
         urlArray.push(photoObj);
       });
@@ -55,8 +94,10 @@ export class FlickrService {
   getPhotoInfo (photoid: string) {
     
     const url = `https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&`;
-    const parameters = `api_key=${environment.flickr.key}&photo_id=${ }&format=json&nojsoncallback=?`;
+    const parameters = `api_key=${environment.flickr.key}&photo_id=${photoid}&format=json&nojsoncallback=?`;
 
-    return this.http.get(url + parameters).
+    return this.http.get<FlickerSingleImage>(url + parameters).pipe(map((res: FlickerSingleImage) => {
+        return res;
+    }));
   }  
 }
